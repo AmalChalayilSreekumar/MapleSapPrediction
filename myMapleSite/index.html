@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Millenium Falcon">
+    <meta name="description" content="myMaple test website description.">
+
+    <title>myMaple</title>
+    <link rel="stylesheet" href="styles.css" media="all">
+    <script type="text/javascript" src="scripts/scripts.js"> </script>
+
+    <body>
+        <header style="position: absolute;">
+            <img id = "myMapleLogo" src="img/myMapleLogo.png" alt="myMaple logo" width = 15%>
+        </header>
+
+        <div id="banner" style="text-align: center;">
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
+            <h1 style="font-size: 52px;margin-left: 30%;margin-right: 30%;">OPTIMIZE THE SYRUP TAPPING SEASON</h1>
+            <h3 style="margin-right:30%; margin-left: 30%;">myMaple utilizes satellite technology and research data to monitor the state of maple trees, allowing for the prediction of ideal sap harvesting time and the estimation of a season's total yield.</h3>
+        </div>
+
+        <div style="text-align: center;">
+            <br>
+            <h2>ENTER YOUR LOCATION</h2>
+                <div>
+                    <input type="text" id="location" name ="location" placeholder="Enter address or zip code" style = "font-family: Poppins; font-size: 16px;" size= "70;" >
+                </div>
+
+                <div>
+                    <!--<input type="checkbox" id ="yield" name="yield"style="font-family: Poppins;" onclick="checkBox(this)"> 
+                    <label for ="yield" style="font-family: Poppins;">Check to view your estimated yield</label>-->
+
+                </div>
+
+                <br>
+
+                <!--<div id = giveYield>
+
+                </div>-->
+                <br>
+
+                <button type="submit" id = "search" style="font-family: Poppins; font-size: 18px;">Search</button>
+                <script>
+                        // Helper function to format date
+                        function formatDate(dateStr) {
+                            const date = new Date(dateStr);
+
+                            // Month names
+                            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                            
+                            const day = date.getDate();
+                            const month = months[date.getMonth()];
+                            const year = date.getFullYear();
+
+                            // Add suffix for 1st, 2nd, 3rd, etc.
+                            const suffix = (day % 10 === 1 && day !== 11) ? "st" :
+                                        (day % 10 === 2 && day !== 12) ? "nd" :
+                                        (day % 10 === 3 && day !== 13) ? "rd" : "th";
+
+                            return `${month} ${day}${suffix}, ${year}`;
+                        }
+
+
+                        document.getElementById('search').addEventListener('click', async () => {
+                        const locationInput = document.getElementById('location').value;
+
+                        if (!locationInput) {
+                            alert("Please enter a location.");
+                            return;
+                        }
+
+                        try {
+                            console.log(JSON.stringify({ location: locationInput }))
+                            const response = await fetch('/freeze-thaw', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ location: locationInput }),
+                            });
+                                
+                            if (!response.ok) {
+                            throw new Error(`Server error: ${response.status}`);
+                            }
+
+                            const data = await response.json();
+                            console.log('Response from backend:', data.start_date_freeze_thaw);
+                            const start = formatDate(data.start_date_freeze_thaw);
+                            const end = formatDate(data.end_date_freeze_thaw);
+                            const ideal = formatDate(data.pick_date);
+                            const res = `<br><h2>YOUR MAPLE TAP INFORMATION</h2><h3 style=\'margin-right:20%; margin-left: 20%;color: #0C0C0C;\'>START DATE: ${start}<br>END DATE: ${end}<br>IDEAL TAP DATE: ${ideal}<br>`
+                            document.getElementById("results").innerHTML = res
+                        } catch (error) {
+                            console.error('Error sending data:', error);
+                        }
+                        });
+                    </script>
+
+                <div id="map"> </div>
+                <div id="results"> </div>
+                <div id="sms"> </div>
+        </div>
+
+        <br>
+        
+        <footer>
+            <br>
+            <p1>Copyright 2025 Millennium Falcon (BramHacks)<p1>
+            <br>
+            <br>
+        </footer>
+
+        <script type="text/javascript" src="scripts/forms.js"> </script>
+    </body>
+
+
+</html>
